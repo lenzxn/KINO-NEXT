@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: kino-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: kino
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: kino-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: kino
+      POSTGRES_PASSWORD: kino
+      POSTGRES_DB: kino
+
+  app:
+    build: .
+    container_name: kino-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+      - postgres
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/kino
+      DATABASE_URL: postgresql://kino:kino@postgres:5432/kino
+      JWT_SECRET: ${JWT_SECRET}
+      TMDB_READ_TOKEN: ${TMDB_READ_TOKEN}
+      NODE_ENV: production
+
+volumes:
+  mongo_data:
+  pg_data:
