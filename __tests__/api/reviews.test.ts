@@ -1,6 +1,7 @@
 /**
- * Testar Review-modellens validering och JWT auth-logiken
+ * @jest-environment node
  */
+// Testar Review-modellens validering och JWT auth-logiken
 
 describe("Review-validering", () => {
   it("godkänner betyg 1–5", () => {
