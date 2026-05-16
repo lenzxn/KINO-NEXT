@@ -1,0 +1,45 @@
+// Prisma används som sekundär databas (PostgreSQL) för VG-jämförelse med MongoDB/Mongoose
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  reviews   Review[]
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  movieId   Int
+  userId    Int
+  author    String
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([movieId])
+}
+
+model Screening {
+  id          Int      @id @default(autoincrement())
+  movieId     Int
+  movieTitle  String
+  startTime   DateTime
+  room        String
+  seats       Int      @default(80)
+  price       Int      @default(120)
+  createdAt   DateTime @default(now())
+
+  @@index([movieId])
+}
