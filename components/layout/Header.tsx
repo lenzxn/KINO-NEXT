@@ -29,21 +29,21 @@ export default function Header() {
 
         <nav className={`header__nav ${menuOpen ? "header__nav--open" : ""}`}>
           <Link href="/" onClick={() => setMenuOpen(false)}>Hem</Link>
-          <Link href="/(pages)/movies" onClick={() => setMenuOpen(false)}>Filmer</Link>
-          <Link href="/(pages)/about" onClick={() => setMenuOpen(false)}>Om oss</Link>
+          <Link href="/movies" onClick={() => setMenuOpen(false)}>Filmer</Link>
+          <Link href="/about" onClick={() => setMenuOpen(false)}>Om oss</Link>
           {username ? (
             <>
-              <Link href="/(pages)/profile" onClick={() => setMenuOpen(false)}>
+              <Link href="/profile" onClick={() => setMenuOpen(false)}>
                 {username}
               </Link>
               <button onClick={handleLogout} className="btn btn--ghost">Logga ut</button>
             </>
           ) : (
             <>
-              <Link href="/(pages)/login" className="btn btn--ghost" onClick={() => setMenuOpen(false)}>
+              <Link href="/login" className="btn btn--ghost" onClick={() => setMenuOpen(false)}>
                 Logga in
               </Link>
-              <Link href="/(pages)/signup" className="btn btn--primary" onClick={() => setMenuOpen(false)}>
+              <Link href="/signup" className="btn btn--primary" onClick={() => setMenuOpen(false)}>
                 Registrera
               </Link>
             </>

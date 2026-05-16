@@ -8,7 +8,7 @@ interface Props {
 
 export default function MovieCard({ movie }: Props) {
   return (
-    <Link href={`/(pages)/movies/${movie.id}`} className="movie-card">
+    <Link href={`/movies/${movie.id}`} className="movie-card">
       <div className="movie-card__poster">
         {movie.image ? (
           <Image

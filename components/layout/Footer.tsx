@@ -13,8 +13,8 @@ export default function Footer() {
         <nav className="footer__nav">
           <h3>Navigering</h3>
           <Link href="/">Hem</Link>
-          <Link href="/(pages)/movies">Filmer</Link>
-          <Link href="/(pages)/about">Om oss</Link>
+          <Link href="/movies">Filmer</Link>
+          <Link href="/about">Om oss</Link>
         </nav>
 
         <div className="footer__contact">

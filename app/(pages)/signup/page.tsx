@@ -86,7 +86,7 @@ export default function SignupPage() {
         </form>
 
         <p className="auth-card__switch">
-          Har du redan ett konto? <Link href="/(pages)/login">Logga in</Link>
+          Har du redan ett konto? <Link href="/login">Logga in</Link>
         </p>
       </div>
     </div>

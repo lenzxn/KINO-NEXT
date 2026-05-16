@@ -11,7 +11,7 @@ export default function SearchBar() {
     e.preventDefault();
     const q = query.trim();
     if (!q) return;
-    router.push(`/(pages)/movies?search=${encodeURIComponent(q)}`);
+    router.push(`/movies?search=${encodeURIComponent(q)}`);
     setQuery("");
   }
 

@@ -20,7 +20,7 @@ export default function ProfilePage() {
     const name = localStorage.getItem("username");
     const token = localStorage.getItem("token");
     if (!name || !token) {
-      router.push("/(pages)/login");
+      router.push("/login");
       return;
     }
     setUsername(name);

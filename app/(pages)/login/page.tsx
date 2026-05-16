@@ -72,7 +72,7 @@ export default function LoginPage() {
         </form>
 
         <p className="auth-card__switch">
-          Inget konto? <Link href="/(pages)/signup">Registrera dig</Link>
+          Inget konto? <Link href="/signup">Registrera dig</Link>
         </p>
       </div>
     </div>

@@ -60,7 +60,7 @@ export default function Carousel({ movies }: Props) {
           <h2 className="carousel__title">{movie.title}</h2>
           <p className="carousel__intro">{movie.intro?.slice(0, 160)}…</p>
           <div className="carousel__actions">
-            <Link href={`/(pages)/movies/${movie.id}`} className="btn btn--primary">
+            <Link href={`/movies/${movie.id}`} className="btn btn--primary">
               Läs mer
             </Link>
             <span className="carousel__rating">★ {movie.rating.toFixed(1)}</span>
