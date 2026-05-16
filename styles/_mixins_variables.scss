@@ -1,0 +1,43 @@
+//This file contains SASS mixins and variables 
+//for colors, fonts, and breakpoints
+
+// Color Variables
+$background-color: #080B10;
+$card-color: #0E131B;
+
+$primary-text-color: #F5F7FA;
+$secondary-text-color: #626C7B;
+
+$blue-color: #179A90;
+$blue-hover-color: #39C2B7;
+
+$orange-color: #DD6031;
+$orange-hover-color: #FF7F4E;
+
+$gold-color: #C9A84C;
+$gold-hover-color: #E2C068;
+
+// Font Variables
+$font-display: 'Playfair Display', Georgia, serif;
+$font-header: 'Inter', system-ui, sans-serif;
+$font-subheader: 'Inter', system-ui, sans-serif;
+$font-body: 'Inter', system-ui, sans-serif;
+
+// Breakpoint Mixins
+@mixin mobile {
+    @media screen and (min-width: 480px) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media screen and (min-width: 768px) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media screen and (min-width: 1018px) {
+        @content;
+    }
+}

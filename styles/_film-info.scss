@@ -1,0 +1,114 @@
+@use "./mixins_variables.scss" as *;
+
+.info-page {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 1rem 2rem; // body handles bottom clearance on mobile
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @include desktop {
+    padding: 2rem 2rem 4rem; // body provides 68px top offset
+  }
+}
+
+.info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 900px;
+  align-items: center;
+
+  @include desktop {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  &_img {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 1.25rem;
+    flex-shrink: 0;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.08),
+      0 24px 60px rgba(0,0,0,0.6);
+
+    @include desktop {
+      max-width: 280px;
+    }
+  }
+
+  &_aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+
+    @include desktop {
+      flex: 1;
+    }
+  }
+
+  &_text {
+    background: rgba($card-color, 0.8);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-top: 1px solid rgba(255,255,255,0.11);
+    padding: 1.5rem;
+    width: 100%;
+    border-radius: 1.25rem;
+
+    h1 {
+      margin: 0.25rem 0 0.75rem;
+      font-size: clamp(1.3rem, 3vw, 1.75rem);
+    }
+
+    p {
+      color: rgba($primary-text-color, 0.65);
+      line-height: 1.7;
+      margin: 0;
+      font-size: 0.9rem;
+    }
+  }
+
+  &_buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    width: 100%;
+  }
+}
+
+.reviewBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-top: 1px solid rgba(255,255,255,0.11);
+  color: rgba($primary-text-color, 0.8);
+  font-family: $font-body;
+  font-size: 0.9rem;
+  height: 3.25rem;
+  width: 100%;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255,255,255,0.07);
+    color: $primary-text-color;
+    border-color: rgba(255,255,255,0.15);
+  }
+}
+
+.rating {
+  font-family: $font-header;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: $gold-color;
+}

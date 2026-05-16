@@ -1,0 +1,92 @@
+@use './mixins_variables.scss' as *;
+
+.primarybtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: #fff;
+  font-family: $font-subheader;
+  font-weight: 600;
+  font-size: 0.9rem;
+  height: 3rem;
+  width: 13rem;
+  border: 1px solid rgba($orange-color, 0.55);
+  border-top: 1px solid rgba($orange-color, 0.85);
+  border-radius: 10px;
+  cursor: pointer;
+  letter-spacing: 0.025em;
+  transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+
+  i { font-size: 0.85rem; }
+
+  &:hover {
+    color: #fff;
+    background: rgba($orange-color, 0.14);
+    border-color: $orange-color;
+    box-shadow: 0 4px 22px rgba($orange-color, 0.22);
+    transform: translateY(-2px);
+  }
+}
+
+.secondarybtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  background: rgba($blue-color, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: $primary-text-color;
+  font-family: $font-subheader;
+  font-weight: 600;
+  font-size: 0.9rem;
+  height: 3rem;
+  width: 13rem;
+  border: 1px solid rgba($blue-color, 0.5);
+  border-top: 1px solid rgba($blue-color, 0.65);
+  border-radius: 10px;
+  cursor: pointer;
+  letter-spacing: 0.025em;
+  box-shadow: 0 0 18px rgba($blue-color, 0.15);
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+
+  i { font-size: 0.85rem; }
+
+  &:hover {
+    background: rgba($blue-color, 0.18);
+    border-color: rgba($blue-color, 0.8);
+    box-shadow: 0 4px 22px rgba($blue-color, 0.35);
+    transform: translateY(-2px);
+  }
+}
+
+
+.tagsbtn {
+  background-color: $background-color;
+  color: $orange-color;
+  font-family: $font-subheader;
+  height: 2rem;
+  width: auto;
+  padding: 0 14px;
+  border: 1px solid $orange-color;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    color: $background-color;
+    border-color: $orange-hover-color;
+    background-color: $orange-hover-color;
+  }
+
+  &.active,
+  &:active {
+    background-color: $orange-color;
+    color: $background-color;
+    border-color: $orange-color;
+  }
+}

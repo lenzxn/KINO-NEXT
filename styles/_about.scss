@@ -1,0 +1,140 @@
+@use './mixins_variables' as *;
+
+.about-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 0 2rem; // body handles bottom clearance on mobile
+
+  @include desktop {
+    padding-top: 2rem; // body provides 68px top offset
+  }
+}
+
+.about_us__field,
+.salon_field,
+.history_field {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $card-color;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 1.25rem;
+  padding: 2rem 1.5rem;
+  margin: 0 1rem 1rem;
+
+  @include desktop {
+    margin: 0 0 1rem;
+  }
+}
+
+.about-us,
+.salon,
+.history {
+  max-width: 760px;
+  width: 100%;
+  line-height: 1.7;
+  color: rgba($primary-text-color, 0.8);
+
+  h1, h2 { color: $primary-text-color; margin-bottom: 1rem; }
+}
+
+.map-section {
+  padding: 0 1rem 1rem;
+
+  @include desktop { padding: 0 0 1rem; }
+}
+
+.map_salon {
+  width: 100%;
+  margin: 0 auto;
+
+  .map_img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 1.25rem;
+  }
+}
+
+.supplies_img {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+  gap: 1rem;
+  width: 100%;
+
+  @include desktop {
+    flex-direction: row;
+    justify-content: center;
+    padding: 0;
+  }
+}
+
+.salon_img,
+.snacks_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1.25rem;
+  object-fit: cover;
+}
+
+.outside-image {
+  padding: 0 1rem 1rem;
+
+  @include desktop { padding: 0 0 1rem; }
+
+  &__wrapper {
+    width: 100%;
+  }
+}
+
+.image_outside {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1.25rem;
+  object-fit: cover;
+}
+
+@include desktop {
+  .about_us__field,
+  .salon_field,
+  .history_field {
+    padding-top: 4rem;
+    padding-bottom: 3rem;
+  }
+
+  .about-us,
+  .salon,
+  .history {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 760px;
+    font-size: 1rem;
+  }
+
+  .supplies_img,
+  .salon_img,
+  .snacks_img {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .map_salon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 1000px;
+  }
+
+  .salon_img,
+  .snacks_img {
+    padding-top: 1rem;
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+  }
+}

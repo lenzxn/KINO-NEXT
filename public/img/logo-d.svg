@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 148 40" fill="none">
+  <defs>
+    <linearGradient id="wordgrad-d" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#C9A84C"/>
+      <stop offset="18%"  stop-color="#F5F7FA"/>
+      <stop offset="82%"  stop-color="#F5F7FA"/>
+      <stop offset="100%" stop-color="#C9A84C"/>
+    </linearGradient>
+    <linearGradient id="bracketgrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#9B1C1C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Left bracket — thick, confident -->
+  <path d="M16 6 L6 6 L6 34 L16 34"
+    stroke="url(#bracketgrad)" stroke-width="2.5" stroke-linecap="butt" fill="none"/>
+  <!-- Corner sprocket squares (diamond rotated 45°) -->
+  <rect x="3.8" y="3.8" width="4.4" height="4.4" fill="#C9A84C" transform="rotate(45 6 6)" opacity="0.9"/>
+  <rect x="3.8" y="31.8" width="4.4" height="4.4" fill="#9B1C1C" transform="rotate(45 6 34)" opacity="0.9"/>
+  <!-- Registration tick -->
+  <line x1="6" y1="20" x2="11" y2="20" stroke="#C9A84C" stroke-width="1.2" opacity="0.5"/>
+
+  <!-- Right bracket -->
+  <path d="M132 6 L142 6 L142 34 L132 34"
+    stroke="url(#bracketgrad)" stroke-width="2.5" stroke-linecap="butt" fill="none"/>
+  <rect x="139.8" y="3.8" width="4.4" height="4.4" fill="#C9A84C" transform="rotate(45 142 6)" opacity="0.9"/>
+  <rect x="139.8" y="31.8" width="4.4" height="4.4" fill="#9B1C1C" transform="rotate(45 142 34)" opacity="0.9"/>
+  <line x1="142" y1="20" x2="137" y2="20" stroke="#C9A84C" stroke-width="1.2" opacity="0.5"/>
+
+  <!-- KINO wordmark — K in gold, INO in white -->
+  <text x="22" y="28"
+    font-family="Inter, system-ui, sans-serif"
+    font-size="22"
+    font-weight="900"
+    letter-spacing="3">
+    <tspan fill="#C9A84C">K</tspan><tspan fill="#F5F7FA">INO</tspan>
+  </text>
+
+  <!-- Hairline underline -->
+  <line x1="22" y1="33" x2="126" y2="33"
+    stroke="#C9A84C" stroke-width="0.75" opacity="0.35"/>
+</svg>

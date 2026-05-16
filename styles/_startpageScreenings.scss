@@ -1,0 +1,314 @@
+@use './mixins_variables' as *;
+
+.screenings {
+  margin: 2.5rem auto 3.5rem;
+  max-width: 1200px;
+  padding: 0 1rem;
+  color: $primary-text-color;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+    z-index: 0;
+    transform: rotate(45deg);
+    box-shadow:
+      /* pinpoint sharp */
+       88px  22px 0px 1px rgba($gold-color, 0.30),
+      240px  14px 0px 1px rgba(255,255,255,0.24),
+      480px  30px 0px 1px rgba($gold-color, 0.28),
+      720px  10px 0px 1px rgba(255,255,255,0.22),
+      920px  26px 0px 1px rgba($gold-color, 0.30),
+       35px 160px 0px 1px rgba(255,255,255,0.22),
+      300px 175px 0px 1px rgba($gold-color, 0.26),
+      580px 155px 0px 1px rgba(255,255,255,0.20),
+      820px 170px 0px 1px rgba($gold-color, 0.28),
+     1020px 145px 0px 1px rgba(255,255,255,0.20),
+       70px 330px 0px 1px rgba($gold-color, 0.24),
+      380px 345px 0px 1px rgba(255,255,255,0.20),
+      660px 320px 0px 1px rgba($gold-color, 0.24),
+      900px 355px 0px 1px rgba(255,255,255,0.18),
+      180px 490px 0px 1px rgba($gold-color, 0.26),
+      490px 510px 0px 1px rgba(255,255,255,0.20),
+      760px 480px 0px 1px rgba($gold-color, 0.22),
+      980px 505px 0px 1px rgba(255,255,255,0.18),
+      /* small glow */
+      155px  80px 1px 1px rgba($gold-color, 0.18),
+      420px  55px 1px 1px rgba(255,255,255,0.14),
+      700px  72px 1px 1px rgba($gold-color, 0.20),
+      960px  48px 1px 1px rgba(255,255,255,0.13),
+      130px 250px 1px 1px rgba($gold-color, 0.17),
+      450px 235px 1px 1px rgba(255,255,255,0.14),
+      730px 260px 1px 1px rgba($gold-color, 0.19),
+      990px 240px 1px 1px rgba(255,255,255,0.12),
+      260px 420px 1px 1px rgba($gold-color, 0.18),
+      560px 400px 1px 1px rgba(255,255,255,0.13),
+      840px 430px 1px 1px rgba($gold-color, 0.16),
+      /* diamonds only — no blurry tiers */;
+  }
+
+  // Diamond accents inside the section
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+    z-index: 0;
+    transform: rotate(45deg);
+    box-shadow:
+      /* visual (160, 90) */  177px  -49px 0px 2px rgba($gold-color, 0.22),
+                              177px  -49px 3px 3px rgba($gold-color, 0.08),
+                              177px  -49px 8px 5px rgba($gold-color, 0.03),
+      /* visual (560, 60) */  438px -354px 0px 2px rgba(255,255,255,0.20),
+                              438px -354px 3px 3px rgba(255,255,255,0.07),
+                              438px -354px 8px 5px rgba(255,255,255,0.03),
+      /* visual (900, 200) */ 778px -495px 0px 2px rgba($gold-color, 0.22),
+                              778px -495px 3px 3px rgba($gold-color, 0.08),
+                              778px -495px 8px 5px rgba($gold-color, 0.03),
+      /* visual (350, 390) */ 523px   28px 0px 2px rgba($gold-color, 0.20),
+                              523px   28px 3px 3px rgba($gold-color, 0.07),
+                              523px   28px 8px 5px rgba($gold-color, 0.03);
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 1.35rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  h2 {
+    margin: 0;
+    font-family: $font-header;
+    font-size: 1.75rem;
+    letter-spacing: 0.2px;
+  }
+
+  // Single column of day-cards — never leaves empty gaps
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// ── Eyebrow decoration ─────────────────────────────────
+.screenings__eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-bottom: 0.55rem;
+
+  span {
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba($gold-color, 0.55));
+    &:last-child { background: linear-gradient(to left, transparent, rgba($gold-color, 0.55)); }
+  }
+  i { font-size: 0.55rem; color: rgba($gold-color, 0.8); }
+}
+
+// ── Day card ───────────────────────────────────────────
+.day-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 1.05rem 1.05rem 0.95rem;
+  background:
+    radial-gradient(900px 280px at 15% 0%, rgba(160, 30, 30, 0.10), transparent 60%),
+    linear-gradient(180deg, rgba($card-color, 0.97), rgba($card-color, 0.85));
+  border: 1px solid rgba(245, 247, 250, 0.08);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.55);
+
+  // Gold → crimson left bar
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 5px;
+    background: linear-gradient(180deg, $gold-color, #9B1C1C);
+    opacity: 0.95;
+  }
+
+  // Gold-tinted shimmer on hover
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      transparent 0%,
+      rgba($gold-color, 0.05) 20%,
+      rgba(245, 247, 250, 0.04) 35%,
+      transparent 50%
+    );
+    transform: translateX(-70%);
+    transition: transform 450ms ease;
+    pointer-events: none;
+  }
+
+  &:hover::after { transform: translateX(70%); }
+}
+
+.day-card__title {
+  margin: 0 0 0.9rem 0.4rem;
+  font-family: $font-subheader;
+  font-size: 1.05rem;
+  color: rgba($primary-text-color, 0.96);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: center;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    background: rgba($gold-color, 0.1);
+    border: 1px solid rgba($gold-color, 0.25);
+    color: $gold-color;
+    font-size: 0.86rem;
+    letter-spacing: 0.2px;
+  }
+}
+
+// ── Screening grid inside card ─────────────────────────
+.day-card__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  @include desktop {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.screening-item {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 1rem;
+  padding: 0.9rem 0.5rem;
+  border-top: 1px solid rgba(245, 247, 250, 0.07);
+  align-items: center;
+
+  &:first-child { border-top: none; }
+
+  @include desktop {
+    grid-template-columns: 84px 1fr;
+
+    &:nth-child(2) { border-top: none; }
+
+    // vertical separator for right column
+    &:nth-child(even) {
+      border-left: 1px solid rgba(245, 247, 250, 0.07);
+      padding-left: 1rem;
+    }
+  }
+}
+
+.screening-poster {
+  width: 72px;
+  height: 108px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid rgba(245, 247, 250, 0.12);
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.50);
+  background: rgba(255, 255, 255, 0.04);
+  display: block;
+
+  @include desktop {
+    width: 84px;
+    height: 126px;
+  }
+
+  &--placeholder {
+    background: rgba(245, 247, 250, 0.06);
+  }
+}
+
+.screening-meta {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.screening-time {
+  font-family: $font-subheader;
+  font-size: 0.95rem;
+  color: rgba($gold-color, 0.88);
+  letter-spacing: 0.25px;
+}
+
+.screening-title {
+  font-family: $font-subheader;
+  font-size: 1.05rem;
+  color: rgba($primary-text-color, 0.98);
+  line-height: 1.2;
+}
+
+.screening-room {
+  margin-top: 0.1rem;
+  font-family: $font-body;
+  font-size: 0.84rem;
+  color: $secondary-text-color;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(245, 247, 250, 0.05);
+  border: 1px solid rgba(245, 247, 250, 0.10);
+}
+
+// ── States ─────────────────────────────────────────────
+.state {
+  border: 1px dashed rgba(245, 247, 250, 0.20);
+  border-radius: 20px;
+  background: rgba($card-color, 0.55);
+  padding: 1.25rem;
+  text-align: center;
+
+  &__title {
+    margin: 0 0 0.35rem;
+    font-family: $font-subheader;
+    color: rgba($primary-text-color, 0.95);
+  }
+  &__text {
+    margin: 0;
+    font-family: $font-body;
+    color: $secondary-text-color;
+  }
+  &--error { border-color: rgba($orange-color, 0.35); }
+}
+
+// ── Loading skeleton ────────────────────────────────────
+.loading {
+  height: 200px;
+  border-radius: 20px;
+  border: 1px solid rgba(245, 247, 250, 0.08);
+  background: linear-gradient(
+    90deg,
+    rgba(245, 247, 250, 0.03),
+    rgba(245, 247, 250, 0.10),
+    rgba(245, 247, 250, 0.03)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.1s infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

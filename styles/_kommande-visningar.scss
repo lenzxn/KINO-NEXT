@@ -1,0 +1,100 @@
+@use "./mixins_variables.scss" as *;
+
+.ticket-section {
+  width: 100%;
+}
+
+.ticket-filter-box {
+  background: rgba($card-color, 0.7);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-top: 1px solid rgba(255,255,255,0.11);
+  padding: 1.75rem;
+  border-radius: 1.25rem;
+  width: 100%;
+
+  h2 {
+    font-family: $font-header;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $primary-text-color;
+    margin: 0 0 1.25rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: $secondary-text-color;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+  }
+}
+
+#dateSelect {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba($primary-text-color, 0.12);
+  background: $background-color;
+  color: $primary-text-color;
+  font-family: $font-body;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  cursor: pointer;
+  appearance: none;
+
+  &:focus {
+    outline: none;
+    border-color: rgba($gold-color, 0.4);
+    box-shadow: 0 0 0 3px rgba($gold-color, 0.08);
+  }
+}
+
+.time-grid {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.time-btn {
+  background: rgba(255,255,255,0.04);
+  color: rgba($primary-text-color, 0.7);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-top: 1px solid rgba(255,255,255,0.14);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: $font-subheader;
+  font-size: 0.88rem;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: rgba(255,255,255,0.08);
+    color: $primary-text-color;
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  &.active {
+    background: rgba($gold-color, 0.13);
+    border-color: rgba($gold-color, 0.45);
+    border-top-color: rgba($gold-color, 0.6);
+    color: $gold-color;
+    font-weight: 600;
+    box-shadow: 0 0 12px rgba($gold-color, 0.1);
+  }
+}
+
+.room-box {
+  margin-top: 1rem;
+  padding: 0.7rem 1rem;
+  background: rgba($gold-color, 0.06);
+  border: 1px solid rgba($gold-color, 0.2);
+  border-radius: 10px;
+  font-family: $font-subheader;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: rgba($primary-text-color, 0.75);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

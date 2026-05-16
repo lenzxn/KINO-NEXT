@@ -1,0 +1,480 @@
+@use './mixins_variables.scss' as *;
+
+// ── Page wrapper ─────────────────────────────────────
+.profile-page {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1.5rem 1rem 2rem; // mobile: no top header; body handles bottom clearance
+
+  @include tablet {
+    padding: 1.5rem 2rem 3rem; // body provides 68px top offset already
+  }
+}
+
+// ── Card shell ───────────────────────────────────────
+.profile-card {
+  width: 100%;
+  max-width: 480px;
+  background: $card-color;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 1.75rem;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 32px 80px rgba(0, 0, 0, 0.4);
+  animation: profileFadeIn 0.45s ease;
+
+  // Desktop: side by side
+  @include tablet {
+    max-width: 820px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  @keyframes profileFadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
+
+// ── Left panel ───────────────────────────────────────
+.profile-left {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  @include tablet {
+    width: 270px;
+    flex-shrink: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    justify-content: space-between;
+  }
+}
+
+// ── Banner ───────────────────────────────────────────
+.profile-banner {
+  height: 110px;
+  background: linear-gradient(
+    135deg,
+    rgba($gold-color, 0.22) 0%,
+    rgba($blue-color, 0.25) 55%,
+    rgba(10, 14, 20, 0.3) 100%
+  );
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, $card-color 100%);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba($gold-color, 0.14) 0%, transparent 55%),
+      radial-gradient(circle at 80% 40%, rgba($blue-color, 0.16) 0%, transparent 50%);
+  }
+
+  // Desktop: banner fills the full left panel height
+  @include tablet {
+    position: absolute;
+    inset: 0;
+    height: auto;
+
+    &::before {
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba($card-color, 0.55) 60%,
+        $card-color 100%
+      );
+    }
+  }
+}
+
+.profile-banner__glow {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba($gold-color, 0.09) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+// ── Header — avatar, name, role ──────────────────────
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -46px;
+  padding: 0 1.5rem 1.25rem;
+  position: relative;
+  z-index: 1;
+
+  @include tablet {
+    padding: 0 1.5rem 1.5rem;
+    margin-top: 1.75rem;    // push down from top of left panel (no banner offset)
+  }
+}
+
+.profile-avatar {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #efefef, #d2d2d2);
+  border: 3px solid $card-color;
+  box-shadow:
+    0 0 0 1px rgba($gold-color, 0.25),
+    0 12px 36px rgba(0, 0, 0, 0.55),
+    inset 0 2px 6px rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.9rem;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow:
+      0 0 0 2px rgba($gold-color, 0.5),
+      0 16px 40px rgba(0, 0, 0, 0.6),
+      inset 0 2px 6px rgba(255, 255, 255, 0.5);
+  }
+
+  i {
+    font-size: 2.5rem;
+    color: #1a1a1a;
+  }
+
+  @include tablet {
+    width: 100px;
+    height: 100px;
+    border: 4px solid $card-color;
+    margin-bottom: 1rem;
+  }
+}
+
+.profile-name {
+  font-family: $font-header;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: $primary-text-color;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.3rem;
+  text-align: center;
+
+  @include tablet {
+    font-size: 1.35rem;
+  }
+}
+
+.profile-role {
+  font-size: 0.72rem;
+  color: rgba($primary-text-color, 0.4);
+  margin: 0;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  i { color: $gold-color; font-size: 0.68rem; }
+}
+
+// ── Stats ─────────────────────────────────────────────
+.profile-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 1.25rem 1.25rem;
+  padding: 1rem 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1rem;
+  position: relative;
+  z-index: 1;
+
+  @include tablet {
+    flex-direction: column;
+    gap: 0;
+    margin: 0 1.25rem;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+  }
+}
+
+.profile-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+
+  @include tablet {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.7rem 1rem;
+    border-radius: 0.75rem;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+  }
+}
+
+.profile-stat__value {
+  font-family: $font-header;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: $primary-text-color;
+  line-height: 1;
+
+  &--gold {
+    color: $gold-color;
+    text-shadow: 0 0 12px rgba($gold-color, 0.4);
+  }
+
+  @include tablet {
+    font-size: 1rem;
+    order: 2;
+  }
+}
+
+.profile-stat__label {
+  font-size: 0.67rem;
+  color: $secondary-text-color;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
+  @include tablet {
+    font-size: 0.73rem;
+    order: 1;
+  }
+}
+
+.profile-stat-divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.07);
+  margin: 0 0.25rem;
+
+  @include tablet {
+    display: none;
+  }
+}
+
+// ── Left panel footer (logout) ────────────────────────
+.profile-card__footer {
+  display: flex;
+  justify-content: center;
+  padding: 1.25rem 1.5rem 1.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  z-index: 1;
+
+  @include tablet {
+    padding: 1.5rem 1.25rem 2rem;
+  }
+}
+
+.profile-logout {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba($primary-text-color, 0.4);
+  font-family: $font-body;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.5rem 1.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  width: 100%;
+  justify-content: center;
+
+  &:hover {
+    color: #e05555;
+    border-color: rgba(#e05555, 0.4);
+    background: rgba(#e05555, 0.06);
+  }
+}
+
+// ── Right panel ───────────────────────────────────────
+.profile-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.75rem 1rem;
+
+  @include tablet {
+    padding: 2rem 1.25rem 1.5rem;
+  }
+}
+
+.profile-menu-heading {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $secondary-text-color;
+  padding: 0.5rem 0.9rem 0.75rem;
+  margin: 0;
+
+  @include tablet {
+    padding: 0 0.9rem 1rem;
+  }
+}
+
+.profile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.8rem 0.9rem;
+  border-radius: 0.9rem;
+  color: rgba($primary-text-color, 0.75);
+  text-decoration: none;
+  font-family: $font-body;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+
+  &__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s ease, border-color 0.15s ease;
+
+    i {
+      font-size: 0.85rem;
+      color: $gold-color;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  &__text {
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  &__sub {
+    font-size: 0.72rem;
+    color: $secondary-text-color;
+    line-height: 1.3;
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
+  }
+
+  &__arrow {
+    font-size: 0.62rem;
+    color: rgba($primary-text-color, 0.2);
+    flex-shrink: 0;
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: $primary-text-color;
+    transform: translateX(2px);
+
+    .profile-menu-item__icon {
+      background: rgba($gold-color, 0.1);
+      border-color: rgba($gold-color, 0.28);
+    }
+
+    .profile-menu-item__arrow {
+      transform: translateX(3px);
+      color: $gold-color;
+    }
+  }
+}
+
+// ── Details view (injected by JS) ─────────────────────
+.profile-details {
+  padding: 1.5rem;
+  animation: profileFadeIn 0.3s ease;
+}
+
+.profile-details__back {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: $gold-color;
+  font-family: $font-body;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0 0 1.25rem;
+  letter-spacing: 0.02em;
+  transition: opacity 0.15s;
+
+  &:hover { opacity: 0.7; }
+}
+
+.profile-details__title {
+  font-family: $font-header;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: $primary-text-color;
+  margin: 0 0 1.25rem;
+}
+
+.profile-details__field {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.85rem;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.profile-details__label {
+  font-size: 0.68rem;
+  color: $secondary-text-color;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.profile-details__value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $primary-text-color;
+}

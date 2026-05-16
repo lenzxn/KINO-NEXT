@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 44" fill="none">
+  <defs>
+    <!-- Warm premium gradient on the wordmark -->
+    <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#FFFFFF"/>
+      <stop offset="60%"  stop-color="#F5F7FA"/>
+      <stop offset="100%" stop-color="#EDE0C4"/>
+    </linearGradient>
+    <!-- Subtle gold glow behind the whole mark -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+      <feColorMatrix in="blur" type="matrix"
+        values="1 0.8 0 0 0  0.8 0.65 0 0 0  0 0 0 0 0  0 0 0 0.55 0" result="colored"/>
+      <feMerge><feMergeNode in="colored"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <g filter="url(#glow)">
+
+    <!-- ── Left film-gate bracket ── -->
+    <path d="M13 7 L4 7 L4 37 L13 37"
+      stroke="#C9A84C" stroke-width="1.75" stroke-linecap="square"/>
+    <!-- Corner sprocket dots -->
+    <circle cx="4" cy="7"  r="2.25" fill="#C9A84C" opacity="0.85"/>
+    <circle cx="4" cy="37" r="2.25" fill="#C9A84C" opacity="0.85"/>
+    <!-- Mid registration tick -->
+    <line x1="4" y1="22" x2="8" y2="22" stroke="#C9A84C" stroke-width="1" opacity="0.45"/>
+
+    <!-- ── Right film-gate bracket ── -->
+    <path d="M147 7 L156 7 L156 37 L147 37"
+      stroke="#C9A84C" stroke-width="1.75" stroke-linecap="square"/>
+    <circle cx="156" cy="7"  r="2.25" fill="#C9A84C" opacity="0.85"/>
+    <circle cx="156" cy="37" r="2.25" fill="#C9A84C" opacity="0.85"/>
+    <line x1="156" y1="22" x2="152" y2="22" stroke="#C9A84C" stroke-width="1" opacity="0.45"/>
+
+    <!-- ── KINO wordmark ── -->
+    <text
+      x="20"
+      y="30"
+      textLength="120"
+      lengthAdjust="spacing"
+      font-family="Inter, system-ui, sans-serif"
+      font-size="23"
+      font-weight="800"
+      fill="url(#wg)"
+      letter-spacing="2">KINO</text>
+
+  </g>
+</svg>

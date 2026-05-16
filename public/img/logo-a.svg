@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 40" fill="none">
+  <defs>
+    <linearGradient id="ul" x1="0%" x2="100%" y1="0%" y2="0%">
+      <stop offset="0%"   stop-color="#C9A84C" stop-opacity="0"/>
+      <stop offset="12%"  stop-color="#C9A84C"/>
+      <stop offset="62%"  stop-color="#9B1C1C"/>
+      <stop offset="100%" stop-color="#9B1C1C" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- K in gold, INO in white — single text flow -->
+  <text x="4" y="29" font-family="Inter, system-ui, sans-serif" font-size="29" font-weight="900" letter-spacing="-0.5">
+    <tspan fill="#C9A84C">K</tspan><tspan fill="#F5F7FA" letter-spacing="1">INO</tspan>
+  </text>
+
+  <!-- Gold → cinema-red underline -->
+  <rect x="4" y="34" width="80" height="1.5" rx="0.75" fill="url(#ul)"/>
+</svg>

@@ -1,0 +1,367 @@
+@use "./mixins_variables.scss" as *;
+
+.slideshow-container {
+  position: relative;
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+
+  @include tablet {
+    margin-top: -28px; // partial bleed behind translucent header — cinematic but not fully hidden
+  }
+
+  @include desktop {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 20px;
+  }
+}
+
+.mySlides {
+  display: none;
+  position: relative;
+}
+
+// Ken Burns zoom — only when no video is playing
+.mySlides.active:not(.player-active) .slide-img {
+  animation: kenBurns 9s ease-out forwards;
+}
+
+@keyframes kenBurns {
+  from { transform: scale(1.07); }
+  to   { transform: scale(1.0); }
+}
+
+.slide-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 56vw;    // mobile: natural cinematic ratio
+  min-height: 280px;
+  max-height: 420px;
+  overflow: hidden;
+
+  @include tablet  { height: 520px; max-height: none; }
+  @include desktop { height: 620px; }
+}
+
+.slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  will-change: transform;
+  transition: opacity 0.9s ease;
+}
+
+// When video is playing, fade the static image out
+.mySlides.player-active .slide-img {
+  opacity: 0;
+}
+
+// YouTube background player — covers the slide like object-fit: cover
+.slide-player-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+  pointer-events: none;
+
+  // Scale iframe up to fill container as cover (16:9 → crop to any aspect ratio)
+  iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    // Guarantee cover in both portrait and landscape orientations
+    width: max(100%, 177.78vh);
+    height: max(100%, 56.25vw);
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+    border: none;
+  }
+}
+
+.mySlides.player-active .slide-player-wrap {
+  opacity: 1;
+}
+
+// Dramatic layered overlay — always on top of video
+.slide-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 1rem 1.25rem;
+  background:
+    linear-gradient(to top, rgba(0,0,0,0.93) 0%, rgba(0,0,0,0.45) 45%, transparent 100%);
+
+  @include tablet  { padding: 2rem 2rem 2rem; }
+  @include desktop { padding: 3rem 3rem 2.75rem; }
+}
+
+// Animated entry per element
+.mySlides.active .slide-meta    { animation: slideUp 0.65s 0.1s ease both; }
+.mySlides.active .slide-title   { animation: slideUp 0.65s 0.22s ease both; }
+.mySlides.active .slide-actions { animation: slideUp 0.65s 0.38s ease both; pointer-events: auto; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.slide-meta {
+  display: none; // hidden on mobile — keep overlay uncluttered
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  opacity: 0;
+
+  @include tablet { display: flex; }
+}
+
+.slide-genres {
+  font-size: 0.7rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba($primary-text-color, 0.6);
+  font-weight: 500;
+}
+
+.slide-rating {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: $gold-color;
+  letter-spacing: 0.04em;
+}
+
+.slide-title {
+  font-family: $font-header;
+  font-size: clamp(1.25rem, 5vw, 3.4rem);
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 0.85rem;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.55);
+  max-width: 720px;
+  opacity: 0;
+
+  @include tablet { margin-bottom: 1.25rem; }
+}
+
+.slide-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  opacity: 0;
+}
+
+.slide-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 1rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: $font-body;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  letter-spacing: 0.02em;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+
+  @include tablet {
+    padding: 0.55rem 1.3rem;
+    font-size: 0.85rem;
+    border-radius: 10px;
+    gap: 0.45rem;
+  }
+
+  &:hover { transform: translateY(-2px); }
+
+  // On mobile, hide the trailer button — info button is the primary action
+  &--trailer { display: none; @include tablet { display: inline-flex; } }
+
+  &--info {
+    background: rgba($blue-color, 0.08);
+    color: $primary-text-color;
+    border: 1px solid rgba($blue-color, 0.5);
+    border-top: 1px solid rgba($blue-color, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 0 18px rgba($blue-color, 0.15);
+
+    &:hover {
+      background: rgba($blue-color, 0.18);
+      border-color: rgba($blue-color, 0.8);
+      border-top-color: $blue-color;
+      box-shadow: 0 0 32px rgba($blue-color, 0.35);
+      transform: translateY(-2px);
+    }
+  }
+
+  &--trailer {
+    background: transparent;
+    color: $orange-color;
+    border: 1px solid rgba($orange-color, 0.55);
+    border-top: 1px solid rgba($orange-color, 0.85);
+
+    &:hover {
+      color: #fff;
+      background: rgba($orange-color, 0.14);
+      border-color: $orange-color;
+      box-shadow: 0 4px 22px rgba($orange-color, 0.22);
+    }
+  }
+}
+
+.play-icon {
+  font-size: 0.7rem;
+}
+
+// Arrows
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.75);
+  user-select: none;
+  z-index: 10;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+
+  svg { width: 20px; height: 20px; pointer-events: none; }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    transform: translateY(-50%) scale(1.08);
+  }
+}
+
+.prev { left: 1rem; }
+.next { right: 1rem; }
+
+// Dot navigation
+.slide-dots {
+  position: absolute;
+  bottom: 1.1rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 0.4rem;
+  z-index: 10;
+
+  @include desktop {
+    bottom: 1.5rem;
+    right: 2rem;
+  }
+}
+
+.slide-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.25s ease, width 0.25s ease, border-radius 0.25s ease;
+
+  &.active {
+    background: $gold-color;
+    width: 22px;
+    border-radius: 4px;
+  }
+}
+
+// Trailer modal
+.trailer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  &.active { opacity: 1; }
+}
+
+.trailer-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.trailer-modal__content {
+  position: relative;
+  z-index: 1;
+  width: 92vw;
+  max-width: 1000px;
+}
+
+.trailer-modal__close {
+  position: absolute;
+  top: -2.75rem;
+  right: 0;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  transition: color 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.trailer-modal__iframe-wrapper {
+  position: relative;
+  padding-top: 56.25%;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.75);
+
+  iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.fade {
+  animation: fade 0.7s ease;
+}
+
+@keyframes fade {
+  from { opacity: 0.2; }
+  to   { opacity: 1; }
+}

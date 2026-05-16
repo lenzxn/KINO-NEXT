@@ -1,0 +1,319 @@
+@use './mixins_variables.scss' as *;
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem; // body handles bottom clearance on mobile
+
+  @include tablet {
+    padding: 2rem 2rem;
+  }
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba($card-color, 0.85);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-top: 1px solid rgba(255,255,255,0.12);
+  border-radius: 1.5rem;
+  padding: 2.25rem 1.75rem 2rem;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.03),
+    0 24px 60px rgba(0,0,0,0.55),
+    0 0 80px rgba($gold-color, 0.04);
+  animation: authFadeIn 0.4s ease both;
+
+  @keyframes authFadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
+
+.auth-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+
+  img {
+    height: 36px;
+    width: auto;
+    filter: drop-shadow(0 0 10px rgba($gold-color, 0.3));
+  }
+}
+
+.auth-title {
+  font-family: $font-header;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: $primary-text-color;
+  text-align: center;
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.03em;
+}
+
+.auth-subtitle {
+  font-size: 0.8rem;
+  color: $secondary-text-color;
+  text-align: center;
+  margin: 0 0 1.75rem;
+}
+
+.auth-section-label {
+  font-family: $font-header;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba($primary-text-color, 0.4);
+  margin: 1.5rem 0 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+
+  &:first-of-type { margin-top: 0; }
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.9rem;
+}
+
+.auth-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba($primary-text-color, 0.65);
+  letter-spacing: 0.01em;
+}
+
+.auth-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 1rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-top: 1px solid rgba(255,255,255,0.14);
+  border-radius: 10px;
+  font-family: $font-body;
+  font-size: 0.9rem;
+  color: $primary-text-color;
+  caret-color: $gold-color;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: rgba($secondary-text-color, 0.45);
+    font-size: 0.85rem;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba($gold-color, 0.4);
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 0 3px rgba($gold-color, 0.07);
+  }
+
+  &.is-error {
+    border-color: rgba(#FA453E, 0.5);
+    box-shadow: 0 0 0 3px rgba(#FA453E, 0.06);
+  }
+}
+
+.auth-input-wrap {
+  position: relative;
+
+  .auth-input { padding-right: 3rem; }
+}
+
+.auth-toggle-password {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba($secondary-text-color, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  transition: color 0.15s;
+
+  svg { width: 18px; height: 18px; }
+
+  &:hover { color: $primary-text-color; }
+}
+
+.auth-error {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #FA453E;
+  display: none;
+
+  &.visible { display: block; }
+}
+
+// Password strength meter
+.auth-strength {
+  display: none;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+
+  &.visible { display: flex; }
+}
+
+.auth-strength__bars {
+  display: flex;
+  gap: 4px;
+}
+
+.auth-strength__bar {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.08);
+  transition: background 0.25s ease;
+
+  &.filled-1 { background: #FA453E; }
+  &.filled-2 { background: $orange-color; }
+  &.filled-3 { background: #22C55E; }
+}
+
+.auth-strength__rules {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.auth-rule {
+  font-size: 0.72rem;
+  color: rgba($primary-text-color, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.2s;
+
+  svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  &.valid {
+    color: #22C55E;
+
+    .auth-rule__x { display: none; }
+    .auth-rule__check { display: block; }
+  }
+
+  .auth-rule__check { display: none; }
+}
+
+.auth-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 3rem;
+  margin-top: 1.25rem;
+  background: rgba($blue-color, 0.08);
+  color: $primary-text-color;
+  font-family: $font-subheader;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 1px solid rgba($blue-color, 0.5);
+  border-top: 1px solid rgba($blue-color, 0.65);
+  border-radius: 10px;
+  cursor: pointer;
+  letter-spacing: 0.025em;
+  box-shadow: 0 0 18px rgba($blue-color, 0.15);
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+
+  &:hover {
+    background: rgba($blue-color, 0.18);
+    border-color: rgba($blue-color, 0.8);
+    box-shadow: 0 4px 22px rgba($blue-color, 0.35);
+    transform: translateY(-2px);
+  }
+}
+
+.auth-secondary-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 3rem;
+  margin-top: 0.6rem;
+  background: transparent;
+  color: rgba($primary-text-color, 0.55);
+  font-family: $font-subheader;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+
+  &:hover {
+    color: $primary-text-color;
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.16);
+  }
+}
+
+.auth-footer-link {
+  display: block;
+  text-align: center;
+  margin-top: 1.25rem;
+  font-size: 0.78rem;
+  color: rgba($secondary-text-color, 0.6);
+  text-decoration: none;
+  transition: color 0.15s;
+
+  &:hover { color: $primary-text-color; }
+}
+
+// Success overlay
+.auth-success-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  &.visible {
+    display: flex;
+    opacity: 1;
+  }
+}
+
+.auth-success-card {
+  background: $card-color;
+  border: 1px solid rgba($gold-color, 0.3);
+  border-radius: 1.25rem;
+  padding: 2rem 2.5rem;
+  text-align: center;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+
+  i {
+    font-size: 2rem;
+    color: $gold-color;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    font-family: $font-header;
+    font-size: 1rem;
+    font-weight: 700;
+    color: $primary-text-color;
+    margin: 0;
+  }
+}

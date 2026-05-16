@@ -1,0 +1,250 @@
+@use "./mixins_variables.scss" as *;
+
+* {
+  box-sizing: border-box;
+}
+
+.starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  transform: rotate(45deg);
+  pointer-events: none;
+  z-index: 0;
+  box-shadow:
+    /* ── left/centre ── */
+     112px  58px 0px 1px rgba($gold-color, 0.30),
+     340px  22px 0px 1px rgba(255,255,255,0.26),
+     680px  88px 0px 1px rgba($gold-color, 0.28),
+      58px 310px 0px 1px rgba(255,255,255,0.25),
+     490px 270px 0px 1px rgba($gold-color, 0.28),
+     840px 340px 0px 1px rgba(255,255,255,0.22),
+     220px 560px 0px 1px rgba(255,255,255,0.24),
+     750px 520px 0px 1px rgba($gold-color, 0.30),
+     380px 780px 0px 1px rgba($gold-color, 0.26),
+     145px 960px 0px 1px rgba(255,255,255,0.20),
+     640px 1020px 0px 1px rgba($gold-color, 0.24),
+     195px 140px 1px 1px rgba($gold-color, 0.18),
+     520px 105px 1px 1px rgba(255,255,255,0.14),
+     790px 175px 1px 1px rgba($gold-color, 0.20),
+      95px 430px 1px 1px rgba(255,255,255,0.14),
+     430px 395px 1px 1px rgba($gold-color, 0.19),
+     700px 460px 1px 1px rgba(255,255,255,0.13),
+     310px 650px 1px 1px rgba($gold-color, 0.18),
+     600px 700px 1px 1px rgba(255,255,255,0.14),
+      40px 850px 1px 1px rgba($gold-color, 0.18),
+     460px 890px 1px 1px rgba(255,255,255,0.14),
+     270px 1080px 1px 1px rgba($gold-color, 0.16),
+
+    /* ── right side (negative oy needed for screen-x > ~700px) ── */
+     799px -686px 0px 1px rgba($gold-color, 0.28),
+     955px -672px 0px 1px rgba(255,255,255,0.22),
+    1153px -658px 0px 1px rgba($gold-color, 0.26),
+    1061px -891px 0px 1px rgba(255,255,255,0.24),
+    1118px -439px 0px 1px rgba($gold-color, 0.28),
+    1379px -530px 0px 1px rgba(255,255,255,0.20),
+    1358px -340px 0px 1px rgba($gold-color, 0.24),
+    1273px -778px 0px 1px rgba(255,255,255,0.22),
+    1428px -693px 0px 1px rgba($gold-color, 0.26),
+     828px -616px 1px 1px rgba($gold-color, 0.17),
+    1047px -623px 1px 1px rgba(255,255,255,0.13),
+     990px -877px 1px 1px rgba($gold-color, 0.16),
+    1308px -672px 1px 1px rgba(255,255,255,0.12),
+    1344px -425px 1px 1px rgba($gold-color, 0.17),
+    1344px -212px 1px 1px rgba(255,255,255,0.11);
+}
+
+// Diamond accents — separate rotated element so box-shadows are true ◆ shapes
+.starfield::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+  transform: rotate(45deg);
+  // Offsets calculated so each diamond appears at the right visual position.
+  // Formula: ox = (Vx+Vy)*0.707, oy = (Vy-Vx)*0.707
+  box-shadow:
+    /* left/centre diamonds */
+    /* visual (220, 280) */  354px   42px 0px 2px rgba($gold-color, 0.22),
+    /* visual (550, 110) */  466px -311px 0px 2px rgba(255,255,255,0.20),
+    /* visual (880, 190) */  755px -488px 0px 2px rgba($gold-color, 0.22),
+    /* visual (680, 590) */  898px  -63px 0px 2px rgba($gold-color, 0.22),
+    /* visual (320, 740) */  750px  297px 0px 2px rgba(255,255,255,0.20),
+    /* visual (110, 600) */  502px  346px 0px 2px rgba($gold-color, 0.22),
+    /* right side diamonds */
+    /* visual (1100, 120) */  863px -693px 0px 2px rgba($gold-color, 0.20),
+    /* visual (1200, 380) */ 1115px -580px 0px 2px rgba($gold-color, 0.20),
+    /* visual (1300, 450) */ 1237px -601px 0px 2px rgba(255,255,255,0.18),
+    /* visual (1450, 200) */ 1167px -884px 0px 2px rgba($gold-color, 0.20),
+    /* visual (970, 850)  */ 1287px  -85px 0px 2px rgba($gold-color, 0.18);
+}
+
+html,
+body {
+  background-color: $background-color;
+  color: $primary-text-color;
+  margin: 0;
+  width: 100%;
+  font-family: $font-body;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Mobile: clear fixed top bar (48px) and bottom nav (56px + safe area)
+body {
+  padding-top: 48px;
+  padding-bottom: calc(56px + env(safe-area-inset-bottom));
+}
+
+h1, h2, h3 {
+  font-family: $font-header;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-top: 0;
+}
+
+h1 { font-size: clamp(1.7rem, 3vw, 2.6rem); }
+h2 { font-size: clamp(1.25rem, 2.2vw, 1.9rem); }
+h3 { font-size: clamp(1rem, 1.6vw, 1.35rem); }
+
+.button_frontpage {
+  display: flex;
+  justify-content: center;
+  gap: 0.65rem;
+  margin: 1.25rem 1rem 0;
+
+  // Mobile: compact, native-feeling pill buttons
+  .primarybtn,
+  .secondarybtn {
+    width: auto;
+    flex: 1;
+    max-width: 160px;
+    height: 2.5rem;
+    font-size: 0.8rem;
+    padding: 0 0.9rem;
+    border-radius: 999px; // pill on mobile
+  }
+
+  @include tablet {
+    margin: 1.75rem 0 0;
+    gap: 1rem;
+
+    .primarybtn,
+    .secondarybtn {
+      flex: unset;
+      width: 13rem;
+      max-width: none;
+      height: 3rem;
+      font-size: 0.9rem;
+      padding: 0;
+      border-radius: 10px;
+    }
+  }
+}
+
+.member-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 1.5rem auto;
+  padding: 1rem 1.5rem;
+  width: calc(100% - 2rem);
+  background: rgba(14, 19, 27, 0.8);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-top: 1px solid rgba(201, 168, 76, 0.4);
+  border-radius: 1.25rem;
+  position: relative;
+  overflow: hidden;
+
+  // Gold shimmer line at top
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.6) 50%, transparent);
+  }
+
+  // Subtle red-cinema glow in background
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 0% 50%, rgba(180, 30, 30, 0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  @include tablet {
+    width: calc(100% - 4rem);
+    padding: 1.1rem 2rem;
+  }
+}
+
+.member-banner__icon {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+
+  i {
+    font-size: 0.85rem;
+    color: $gold-color;
+  }
+}
+
+.member-banner__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  z-index: 1;
+
+  strong {
+    font-family: $font-header;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: $primary-text-color;
+    letter-spacing: -0.01em;
+  }
+
+  span {
+    font-size: 0.8rem;
+    color: rgba($primary-text-color, 0.55);
+    line-height: 1.4;
+  }
+}
+
+.member-banner__cta {
+  flex-shrink: 0;
+  text-decoration: none;
+  font-family: $font-subheader;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $gold-color;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  opacity: 0.85;
+  transition: opacity 0.15s, gap 0.2s;
+  z-index: 1;
+
+  i { font-size: 0.6rem; }
+
+  &:hover {
+    opacity: 1;
+    gap: 0.5rem;
+  }
+}
