@@ -1,94 +1,210 @@
 "use client";
 
-import { useState, FormEvent } from "react";
-import Link from "next/link";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Button from "@/components/ui/Button";
+import type { Metadata } from "next";
 
 export default function SignupPage() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [pwVisible, setPwVisible] = useState(false);
+  const [strength, setStrength] = useState({ okLength: false, okSpecial: false, okNumber: false });
+  const [meterVisible, setMeterVisible] = useState(false);
+  const [usernameTaken, setUsernameTaken] = useState(false);
 
-  async function handleSubmit(e: FormEvent) {
+  const fnameRef    = useRef<HTMLInputElement>(null);
+  const lnameRef    = useRef<HTMLInputElement>(null);
+  const emailRef    = useRef<HTMLInputElement>(null);
+  const usernameRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser") ?? "null");
+    if (currentUser) router.replace("/profile");
+  }, [router]);
+
+  function handlePasswordInput() {
+    const val = passwordRef.current?.value ?? "";
+    const okLength  = val.length >= 8;
+    const okSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(val);
+    const okNumber  = /\d/.test(val);
+    setStrength({ okLength, okSpecial, okNumber });
+  }
+
+  function handleUsernameInput() {
+    const val = usernameRef.current?.value.trim() ?? "";
+    if (!val) { setUsernameTaken(false); return; }
+    const allUsers: { username: string }[] = JSON.parse(localStorage.getItem("allUsers") ?? "[]");
+    setUsernameTaken(allUsers.some(u => u.username.toLowerCase() === val.toLowerCase()));
+  }
+
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
-    setLoading(true);
+    if (usernameTaken) return;
 
-    try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
-      });
+    const fname    = fnameRef.current?.value.trim() ?? "";
+    const lname    = lnameRef.current?.value.trim() ?? "";
+    const email    = emailRef.current?.value.trim() ?? "";
+    const username = usernameRef.current?.value.trim() ?? "";
+    const password = passwordRef.current?.value ?? "";
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Registrering misslyckades");
+    if (!fname || !lname || !email || !username || !password) return;
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("username", data.username);
-      router.push("/");
-      router.refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Serverfel");
-    } finally {
-      setLoading(false);
-    }
+    const allUsers: object[] = JSON.parse(localStorage.getItem("allUsers") ?? "[]");
+    const newUser = { fname, lname, email, username, password };
+    allUsers.push(newUser);
+    localStorage.setItem("allUsers", JSON.stringify(allUsers));
+    router.push("/login");
+  }
+
+  const score = [strength.okLength, strength.okSpecial, strength.okNumber].filter(Boolean).length;
+
+  function barClass(barIndex: number) {
+    if (score >= barIndex) return `auth-strength__bar filled-${Math.min(score, 3)}`;
+    return "auth-strength__bar";
   }
 
   return (
-    <div className="auth-page">
-      <div className="auth-card">
-        <h1>Skapa konto</h1>
+    <>
+      <main className="auth-page">
+        <div className="auth-card">
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <label>
-            Användarnamn
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              minLength={2}
-              autoComplete="username"
-            />
-          </label>
+          <div className="auth-logo">
+            <img src="/img/kino-logo.svg" alt="Kino" />
+          </div>
 
-          <label>
-            E-post
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-            />
-          </label>
+          <h1 className="auth-title">Bli medlem</h1>
+          <p className="auth-subtitle">Skapa ditt Kino-konto</p>
 
-          <label>
-            Lösenord <small>(minst 6 tecken)</small>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              autoComplete="new-password"
-            />
-          </label>
+          <form id="signupForm" noValidate onSubmit={handleSubmit}>
 
-          {error && <p className="auth-form__error">{error}</p>}
+            <p className="auth-section-label">Personlig information</p>
 
-          <Button type="submit" loading={loading}>Registrera</Button>
-        </form>
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="fname">Förnamn</label>
+              <input
+                className="auth-input"
+                type="text"
+                id="fname"
+                name="fname"
+                placeholder="Förnamn"
+                autoComplete="given-name"
+                pattern="[A-Za-zåäöÅÄÖ]*"
+                required
+                ref={fnameRef}
+              />
+            </div>
 
-        <p className="auth-card__switch">
-          Har du redan ett konto? <Link href="/login">Logga in</Link>
-        </p>
-      </div>
-    </div>
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="lname">Efternamn</label>
+              <input
+                className="auth-input"
+                type="text"
+                id="lname"
+                name="lname"
+                placeholder="Efternamn"
+                autoComplete="family-name"
+                pattern="[A-Za-zåäöÅÄÖ]*"
+                required
+                ref={lnameRef}
+              />
+            </div>
+
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="email">E-post</label>
+              <input
+                className="auth-input"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="din@epost.se"
+                autoComplete="email"
+                required
+                ref={emailRef}
+              />
+            </div>
+
+            <p className="auth-section-label">Inloggning</p>
+
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="username">Användarnamn</label>
+              <input
+                className="auth-input"
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Välj ett användarnamn"
+                autoComplete="username"
+                required
+                ref={usernameRef}
+                onChange={handleUsernameInput}
+              />
+              <span className={`auth-error${usernameTaken ? " visible" : ""}`} id="usernameWarning">
+                Användarnamnet är redan taget.
+              </span>
+            </div>
+
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="password">Lösenord</label>
+              <div className="auth-input-wrap">
+                <input
+                  className="auth-input"
+                  type={pwVisible ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  placeholder="Välj ett säkert lösenord"
+                  autoComplete="new-password"
+                  required
+                  ref={passwordRef}
+                  onFocus={() => setMeterVisible(true)}
+                  onInput={handlePasswordInput}
+                />
+                <button
+                  type="button"
+                  className="auth-toggle-password"
+                  id="togglePassword"
+                  aria-label="Visa/dölj lösenord"
+                  onClick={() => setPwVisible(v => !v)}
+                >
+                  <svg id="eyeIconShow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={pwVisible ? { display: "none" } : undefined}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg id="eyeIconHide" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={pwVisible ? undefined : { display: "none" }}><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+              <div className={`auth-strength${meterVisible ? " visible" : ""}`} id="strengthMeter">
+                <div className="auth-strength__bars">
+                  <div className={barClass(1)} id="bar1"></div>
+                  <div className={barClass(2)} id="bar2"></div>
+                  <div className={barClass(3)} id="bar3"></div>
+                </div>
+                <div className="auth-strength__rules">
+                  <span className={`auth-rule${strength.okLength ? " valid" : ""}`} id="ruleLength">
+                    <svg className="auth-rule__x" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    <svg className="auth-rule__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Minst 8 tecken
+                  </span>
+                  <span className={`auth-rule${strength.okSpecial ? " valid" : ""}`} id="ruleSpecial">
+                    <svg className="auth-rule__x" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    <svg className="auth-rule__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Minst ett specialtecken
+                  </span>
+                  <span className={`auth-rule${strength.okNumber ? " valid" : ""}`} id="ruleNumber">
+                    <svg className="auth-rule__x" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    <svg className="auth-rule__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Minst en siffra
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" className="auth-submit">
+              <i className="fa-solid fa-user-plus"></i> Skapa konto
+            </button>
+
+          </form>
+
+          <a href="/login" className="auth-footer-link">Redan medlem? Logga in</a>
+
+        </div>
+      </main>
+    </>
   );
 }
