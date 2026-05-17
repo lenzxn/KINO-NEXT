@@ -64,19 +64,24 @@ npm test
 
 ### Lokal utveckling
 ```bash
-# 1. Starta databaser
+# 1. Starta MongoDB (och PostgreSQL) via Docker
 docker compose up mongodb postgres -d
 
-# 2. Installera paket
+# 2. Skapa .env.local med nödvändiga miljövariabler
+# MONGODB_URI=mongodb://localhost:27017/kino
+# JWT_SECRET=kino_super_secret_change_in_production
+# TMDB_READ_TOKEN=din_tmdb_token
+
+# 3. Installera paket
 npm install
 
-# 3. Generera Prisma-klient
+# 4. Generera Prisma-klient
 npx prisma generate
 
-# 4. Kör migreringar (PostgreSQL)
+# 5. Kör migreringar (PostgreSQL)
 npx prisma migrate dev --name init
 
-# 5. Starta dev-servern
+# 6. Starta dev-servern
 npm run dev
 ```
 

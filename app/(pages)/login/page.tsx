@@ -56,7 +56,7 @@ export default function LoginPage() {
     fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username }),
+      body: JSON.stringify({ username, password }),
     })
       .then(r => r.json())
       .then(d => { if (d.token) localStorage.setItem("token", d.token); })

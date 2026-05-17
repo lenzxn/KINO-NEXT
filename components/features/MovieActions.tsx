@@ -93,17 +93,15 @@ export default function MovieActions({ movieId }: Props) {
     }
 
     try {
-      const res = await fetch("/api/reviews", {
+      const res = await fetch(`/api/movies/${movieId}/reviews`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          name: reviewName,
           rating: parseInt(reviewRating),
           comment: reviewComment,
-          movie: movieId,
         }),
       });
       const data = await res.json();
