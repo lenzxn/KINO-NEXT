@@ -4,24 +4,24 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 
 interface Review {
-  _id: string;
-  author: string;
+  id: number;
+  quote: string;
   rating: number;
-  comment: string;
+  name: string;
   verified?: boolean | null;
 }
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 
 export default function ReviewsPage() {
   const params = useParams();
   const movieId = params.id as string;
 
-  const [reviews, setReviews]   = useState<Review[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages]   = useState(1);
-  const [loading, setLoading]   = useState(true);
-  const [error, setError]       = useState(false);
+  const [reviews, setReviews]           = useState<Review[]>([]);
+  const [currentPage, setCurrentPage]   = useState(1);
+  const [totalPages, setTotalPages]     = useState(1);
+  const [loading, setLoading]           = useState(true);
+  const [error, setError]               = useState(false);
 
   const loadReviews = useCallback(async (page: number) => {
     setLoading(true);
@@ -30,14 +30,8 @@ export default function ReviewsPage() {
       const res = await fetch(`/api/movies/${movieId}/reviews?page=${page}&limit=${PAGE_SIZE}`);
       if (!res.ok) throw new Error();
       const data = await res.json();
-
-      if (Array.isArray(data)) {
-        setReviews(data);
-        setTotalPages(1);
-      } else {
-        setReviews(data.reviews ?? []);
-        setTotalPages(data.totalPages ?? 1);
-      }
+      setReviews(data.reviews ?? []);
+      setTotalPages(data.totalPages ?? 1);
     } catch {
       setError(true);
     } finally {
@@ -68,11 +62,11 @@ export default function ReviewsPage() {
         {error && <p>Kunde inte ladda recensioner.</p>}
         {!loading && !error && reviews.length === 0 && <p>Inga recensioner ännu</p>}
         {!loading && !error && reviews.map(review => (
-          <article key={review._id} className="review-card">
+          <article key={review.id} className="review-card">
             <p className="review-card_rating">&#11088; {review.rating}/5</p>
-            <blockquote className="review-card_quote">{review.comment}</blockquote>
+            <blockquote className="review-card_quote">{review.quote}</blockquote>
             <h2 className="review-card_name">
-              {review.author}
+              {review.name}
               <span className="review-card_verified"> {verifiedIcon(review.verified)}</span>
             </h2>
           </article>

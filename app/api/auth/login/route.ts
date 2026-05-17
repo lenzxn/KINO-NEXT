@@ -1,37 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import { connectMongo } from "@/lib/db/mongodb";
-import User from "@/models/User";
-import { signToken } from "@/lib/auth";
+import { SignJWT } from "jose";
+
+const SECRET = new TextEncoder().encode(process.env.JWT_SECRET ?? "demo_secret");
 
 export async function POST(req: NextRequest) {
-  try {
-    const { email, password } = await req.json();
+  const { username } = await req.json();
 
-    if (!email || !password) {
-      return NextResponse.json({ error: "E-post och lösenord krävs" }, { status: 400 });
-    }
-
-    await connectMongo();
-
-    const user = await User.findOne({ email });
-    if (!user) {
-      return NextResponse.json({ error: "Felaktiga inloggningsuppgifter" }, { status: 401 });
-    }
-
-    const valid = await bcrypt.compare(password, user.password);
-    if (!valid) {
-      return NextResponse.json({ error: "Felaktiga inloggningsuppgifter" }, { status: 401 });
-    }
-
-    const token = await signToken({
-      userId: user._id.toString(),
-      username: user.username,
-      email: user.email,
-    });
-
-    return NextResponse.json({ token, username: user.username });
-  } catch {
-    return NextResponse.json({ error: "Serverfel" }, { status: 500 });
+  if (!username || typeof username !== "string" || !username.trim()) {
+    return NextResponse.json({ error: "Användarnamn krävs" }, { status: 400 });
   }
+
+  const token = await new SignJWT({ username: username.trim() })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("1h")
+    .sign(SECRET);
+
+  return NextResponse.json({ token });
 }

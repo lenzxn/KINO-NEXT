@@ -5,9 +5,9 @@ const secret = new TextEncoder().encode(
 );
 
 export interface JwtPayload {
-  userId: string;
+  userId?: string;
   username: string;
-  email: string;
+  email?: string;
 }
 
 export async function signToken(payload: JwtPayload): Promise<string> {

@@ -3,16 +3,9 @@
 import { useState, useEffect } from "react";
 
 interface Screening {
-  _id: string;
+  id: number;
   start_time: string;
   room: string;
-}
-
-interface ReviewData {
-  _id: string;
-  author: string;
-  rating: number;
-  comment: string;
 }
 
 interface Props { movieId: number }
@@ -22,8 +15,8 @@ export default function MovieActions({ movieId }: Props) {
   const [reviewCount, setReviewCount] = useState(0);
 
   // Screenings state
-  const [screenings, setScreenings]   = useState<Screening[]>([]);
-  const [byDate, setByDate]           = useState<Record<string, Screening[]>>({});
+  const [screenings, setScreenings]     = useState<Screening[]>([]);
+  const [byDate, setByDate]             = useState<Record<string, Screening[]>>({});
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState<Screening | null>(null);
   const [noScreenings, setNoScreenings] = useState(false);
@@ -34,15 +27,15 @@ export default function MovieActions({ movieId }: Props) {
   const [reviewComment, setReviewComment] = useState("");
   const [reviewMessage, setReviewMessage] = useState("");
 
-  // Load review count
+  // Load review count from Plankton CMS via API
   useEffect(() => {
     fetch(`/api/movies/${movieId}/reviews`)
       .then(r => r.json())
-      .then((data: ReviewData[]) => setReviewCount(Array.isArray(data) ? data.length : 0))
+      .then((data) => setReviewCount(Array.isArray(data) ? data.length : 0))
       .catch(() => {});
   }, [movieId]);
 
-  // Load screenings
+  // Load screenings from Plankton CMS via API
   useEffect(() => {
     fetch(`/api/movies/${movieId}/screenings`)
       .then(r => r.json())
@@ -65,6 +58,30 @@ export default function MovieActions({ movieId }: Props) {
       .catch(() => setNoScreenings(true));
   }, [movieId]);
 
+  // Fetch rating from API and update .rating span (matches original rating.js)
+  useEffect(() => {
+    fetch(`/api/movies/${movieId}/rating`)
+      .then(r => r.json())
+      .then(result => {
+        const ratingArea = document.querySelector(".rating");
+        if (!ratingArea) return;
+        ratingArea.textContent = "";
+
+        const ratingValue = Number(result.rating).toFixed(1);
+
+        if (result.source === "local") {
+          ratingArea.textContent = `⭐ ${ratingValue}`;
+        } else if (result.source === "imdb") {
+          const img = document.createElement("img");
+          img.src = "/img/imdbLogo.png";
+          img.alt = "IMDb";
+          img.style.cssText = "width:40px;vertical-align:middle;margin-right:5px;";
+          ratingArea.append(img, ` ${ratingValue}`);
+        }
+      })
+      .catch(() => {});
+  }, [movieId]);
+
   async function submitReview(e: React.FormEvent) {
     e.preventDefault();
     setReviewMessage("Skickar recension...");
@@ -76,19 +93,21 @@ export default function MovieActions({ movieId }: Props) {
     }
 
     try {
-      const res = await fetch(`/api/movies/${movieId}/reviews`, {
+      const res = await fetch("/api/reviews", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          name: reviewName,
           rating: parseInt(reviewRating),
           comment: reviewComment,
+          movie: movieId,
         }),
       });
       const data = await res.json();
-      if (res.ok) {
+      if (res.ok && data.success) {
         setReviewMessage("Recension skickad!");
         setReviewName(""); setReviewRating(""); setReviewComment("");
         setReviewCount(c => c + 1);
@@ -185,8 +204,8 @@ export default function MovieActions({ movieId }: Props) {
                   const time = new Date(s.start_time).toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
                   return (
                     <button
-                      key={s._id}
-                      className={`time-btn${selectedTime?._id === s._id ? " active" : ""}`}
+                      key={s.id}
+                      className={`time-btn${selectedTime?.id === s.id ? " active" : ""}`}
                       onClick={() => setSelectedTime(s)}
                     >
                       {time}
