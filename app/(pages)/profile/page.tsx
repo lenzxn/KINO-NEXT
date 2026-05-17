@@ -41,9 +41,6 @@ export default function ProfilePage() {
     return (
       <main className="profile-page">
         <div className="profile-card" id="profileSection">
-          <div className="profile-banner">
-            <div className="profile-banner__glow"></div>
-          </div>
           <div className="profile-details">
             <button className="profile-details__back" onClick={() => setView("main")}>
               <i className="fa-solid fa-arrow-left"></i> Tillbaka
