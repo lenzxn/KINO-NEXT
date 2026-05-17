@@ -1,5 +1,11 @@
 @use './mixins_variables.scss' as *;
 
+// Body offset for fixed nav — mobile first, tablet overrides below
+body {
+  padding-top: 48px; // .mobile-top-bar height
+  padding-bottom: calc(56px + env(safe-area-inset-bottom)); // .mobile-nav height
+}
+
 .header_inner {
   display: none;
 }

@@ -1,4 +1,9 @@
 @charset "UTF-8";
+body {
+  padding-top: 48px;
+  padding-bottom: calc(56px + env(safe-area-inset-bottom));
+}
+
 .header_inner {
   display: none;
 }
@@ -1027,11 +1032,6 @@ body {
   font-family: "Inter", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  padding-top: 48px;
-  padding-bottom: calc(56px + env(safe-area-inset-bottom));
 }
 
 h1, h2, h3 {

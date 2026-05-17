@@ -95,11 +95,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-// Mobile: clear fixed top bar (48px) and bottom nav (56px + safe area)
-body {
-  padding-top: 48px;
-  padding-bottom: calc(56px + env(safe-area-inset-bottom));
-}
 
 h1, h2, h3 {
   font-family: $font-header;
