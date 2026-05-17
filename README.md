@@ -83,6 +83,10 @@ npx prisma migrate dev --name init
 
 # 6. Starta dev-servern
 npm run dev
+
+# — eller bygg och kör i produktionsläge —
+npm run build
+npm start
 ```
 
 Öppna [http://localhost:3000](http://localhost:3000)
@@ -92,6 +96,9 @@ npm run dev
 ## Docker Compose (VG-moment)
 
 ```bash
+# Starta bara MongoDB
+docker compose up mongodb -d
+
 # Bygg och starta hela stacken (app + MongoDB + PostgreSQL)
 docker compose up --build
 
