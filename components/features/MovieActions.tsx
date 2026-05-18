@@ -14,20 +14,17 @@ export default function MovieActions({ movieId }: Props) {
   const [showPopup, setShowPopup]     = useState(false);
   const [reviewCount, setReviewCount] = useState(0);
 
-  // Screenings state
   const [screenings, setScreenings]     = useState<Screening[]>([]);
   const [byDate, setByDate]             = useState<Record<string, Screening[]>>({});
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState<Screening | null>(null);
   const [noScreenings, setNoScreenings] = useState(false);
 
-  // Review form state
   const [reviewName, setReviewName]       = useState("");
   const [reviewRating, setReviewRating]   = useState("");
   const [reviewComment, setReviewComment] = useState("");
   const [reviewMessage, setReviewMessage] = useState("");
 
-  // Load review count from Plankton CMS via API
   useEffect(() => {
     fetch(`/api/movies/${movieId}/reviews`)
       .then(r => r.json())
@@ -35,7 +32,6 @@ export default function MovieActions({ movieId }: Props) {
       .catch(() => {});
   }, [movieId]);
 
-  // Load screenings from Plankton CMS via API
   useEffect(() => {
     fetch(`/api/movies/${movieId}/screenings`)
       .then(r => r.json())
@@ -58,7 +54,6 @@ export default function MovieActions({ movieId }: Props) {
       .catch(() => setNoScreenings(true));
   }, [movieId]);
 
-  // Fetch rating from API and update .rating span (matches original rating.js)
   useEffect(() => {
     fetch(`/api/movies/${movieId}/rating`)
       .then(r => r.json())

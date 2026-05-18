@@ -16,9 +16,7 @@ export async function POST(req: NextRequest) {
     const user = await User.findOne({ username: username.trim() });
 
     if (!user) {
-      // Not in MongoDB (localStorage-only user) — sign simple JWT for backward compat
-      const token = await signToken({ username: username.trim() });
-      return NextResponse.json({ token });
+      return NextResponse.json({ error: "Felaktigt användarnamn eller lösenord" }, { status: 401 });
     }
 
     const valid = await bcrypt.compare(password ?? "", user.password);

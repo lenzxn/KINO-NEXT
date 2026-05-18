@@ -36,7 +36,6 @@ export default function Carousel({ movies }: Props) {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // -- state --
     let currentIndex = 0;
     let autoplayTimer: ReturnType<typeof setInterval> | null = null;
     let slides: HTMLElement[] = [];
@@ -205,7 +204,6 @@ export default function Carousel({ movies }: Props) {
       startAutoplay();
     }
 
-    // -- init --
     const container = containerRef.current;
     if (!container) return;
     const allSlides = Array.from(container.querySelectorAll<HTMLElement>(".mySlides"));

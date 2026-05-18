@@ -16,23 +16,18 @@ export async function GET(
     const ref = findEarliestScreeningDate(cmsResult);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const upcoming = (cmsResult.data ?? [])
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const upcoming = (cmsResult.data as any[] ?? [])
       .filter((s: any) => s.attributes?.movie?.data?.id === movieId)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .filter((s: any) => new Date(s.attributes.start_time) > ref)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .map((s: any) => ({
         id: s.id,
         start_time: s.attributes.start_time,
         room: s.attributes.room,
       }))
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .sort((a: any, b: any) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
 
     return NextResponse.json(upcoming);
-  } catch (err) {
-    console.error("screenings error:", err);
+  } catch {
     return NextResponse.json([], { status: 500 });
   }
 }

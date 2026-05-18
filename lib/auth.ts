@@ -1,8 +1,8 @@
 import { SignJWT, jwtVerify } from "jose";
 
-const secret = new TextEncoder().encode(
-  process.env.JWT_SECRET ?? "kino_super_secret_change_in_production"
-);
+if (!process.env.JWT_SECRET) throw new Error("JWT_SECRET saknas i miljövariablerna");
+
+const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export interface JwtPayload {
   userId?: string;
