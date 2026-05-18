@@ -18,49 +18,51 @@ export default function LoginPage() {
     if (currentUser) router.replace("/profile");
   }, [router]);
 
-  function showError(el: HTMLSpanElement | null, input: HTMLInputElement | null, msg: string) {
+  function showFieldError(el: HTMLSpanElement | null, input: HTMLInputElement | null, msg: string) {
     if (!el || !input) return;
     el.textContent = msg;
     el.classList.add("visible");
     input.classList.add("is-error");
   }
-  function clearError(el: HTMLSpanElement | null, input: HTMLInputElement | null) {
+  function clearFieldError(el: HTMLSpanElement | null, input: HTMLInputElement | null) {
     if (!el || !input) return;
     el.classList.remove("visible");
     input.classList.remove("is-error");
   }
+  function showLoginError(msg: string) {
+    if (!loginMsgRef.current) return;
+    loginMsgRef.current.textContent = msg;
+    loginMsgRef.current.classList.add("visible");
+  }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    clearError(usernameErrRef.current, usernameRef.current);
-    clearError(passwordErrRef.current, passwordRef.current);
+    clearFieldError(usernameErrRef.current, usernameRef.current);
+    clearFieldError(passwordErrRef.current, passwordRef.current);
     if (loginMsgRef.current) loginMsgRef.current.classList.remove("visible");
 
     const username = usernameRef.current?.value.trim() ?? "";
-    const password = passwordRef.current?.value.trim() ?? "";
+    const password = passwordRef.current?.value ?? "";
     let hasError = false;
 
-    if (!username) { showError(usernameErrRef.current, usernameRef.current, "Fältet kan inte vara tomt."); hasError = true; }
-    if (!password) { showError(passwordErrRef.current, passwordRef.current, "Fältet kan inte vara tomt."); hasError = true; }
+    if (!username) { showFieldError(usernameErrRef.current, usernameRef.current, "Fältet kan inte vara tomt."); hasError = true; }
+    if (!password) { showFieldError(passwordErrRef.current, passwordRef.current, "Fältet kan inte vara tomt."); hasError = true; }
     if (hasError) return;
 
-    const allUsers: { username: string; password: string; fname?: string; lname?: string; email?: string }[] =
-      JSON.parse(localStorage.getItem("allUsers") ?? "[]");
-    const matched = allUsers.find(u => u.username.toLowerCase() === username.toLowerCase());
-
-    if (!matched) { showError(usernameErrRef.current, usernameRef.current, "Användarnamnet finns ej."); return; }
-    if (matched.password !== password) { showError(passwordErrRef.current, passwordRef.current, "Lösenordet stämmer ej."); return; }
-
-    localStorage.setItem("currentUser", JSON.stringify(matched));
-
-    fetch("/api/auth/login", {
+    const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
-    })
-      .then(r => r.json())
-      .then(d => { if (d.token) localStorage.setItem("token", d.token); })
-      .catch(() => {});
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      showLoginError(data.error ?? "Inloggning misslyckades");
+      return;
+    }
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("currentUser", JSON.stringify({ username }));
 
     if (overlayRef.current) overlayRef.current.classList.add("visible");
     setTimeout(() => router.push("/profile"), 1200);

@@ -2,14 +2,13 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import type { Metadata } from "next";
 
 export default function SignupPage() {
   const router = useRouter();
   const [pwVisible, setPwVisible] = useState(false);
   const [strength, setStrength] = useState({ okLength: false, okSpecial: false, okNumber: false });
   const [meterVisible, setMeterVisible] = useState(false);
-  const [usernameTaken, setUsernameTaken] = useState(false);
+  const [signupError, setSignupError] = useState("");
 
   const fnameRef    = useRef<HTMLInputElement>(null);
   const lnameRef    = useRef<HTMLInputElement>(null);
@@ -30,16 +29,9 @@ export default function SignupPage() {
     setStrength({ okLength, okSpecial, okNumber });
   }
 
-  function handleUsernameInput() {
-    const val = usernameRef.current?.value.trim() ?? "";
-    if (!val) { setUsernameTaken(false); return; }
-    const allUsers: { username: string }[] = JSON.parse(localStorage.getItem("allUsers") ?? "[]");
-    setUsernameTaken(allUsers.some(u => u.username.toLowerCase() === val.toLowerCase()));
-  }
-
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (usernameTaken) return;
+    setSignupError("");
 
     const fname    = fnameRef.current?.value.trim() ?? "";
     const lname    = lnameRef.current?.value.trim() ?? "";
@@ -49,11 +41,21 @@ export default function SignupPage() {
 
     if (!fname || !lname || !email || !username || !password) return;
 
-    const allUsers: object[] = JSON.parse(localStorage.getItem("allUsers") ?? "[]");
-    const newUser = { fname, lname, email, username, password };
-    allUsers.push(newUser);
-    localStorage.setItem("allUsers", JSON.stringify(allUsers));
-    router.push("/login");
+    const res = await fetch("/api/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email, password }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      setSignupError(data.error ?? "Registrering misslyckades");
+      return;
+    }
+
+    if (data.token) localStorage.setItem("token", data.token);
+    localStorage.setItem("currentUser", JSON.stringify({ username, fname, lname, email }));
+    router.push("/profile");
   }
 
   const score = [strength.okLength, strength.okSpecial, strength.okNumber].filter(Boolean).length;
@@ -136,11 +138,7 @@ export default function SignupPage() {
                 autoComplete="username"
                 required
                 ref={usernameRef}
-                onChange={handleUsernameInput}
               />
-              <span className={`auth-error${usernameTaken ? " visible" : ""}`} id="usernameWarning">
-                Användarnamnet är redan taget.
-              </span>
             </div>
 
             <div className="auth-field">
@@ -194,6 +192,10 @@ export default function SignupPage() {
                 </div>
               </div>
             </div>
+
+            {signupError && (
+              <p className="auth-error visible" style={{ marginBottom: "12px" }}>{signupError}</p>
+            )}
 
             <button type="submit" className="auth-submit">
               <i className="fa-solid fa-user-plus"></i> Skapa konto
