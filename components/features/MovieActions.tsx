@@ -20,7 +20,6 @@ export default function MovieActions({ movieId }: Props) {
   const [selectedTime, setSelectedTime] = useState<Screening | null>(null);
   const [noScreenings, setNoScreenings] = useState(false);
 
-  const [reviewName, setReviewName]       = useState("");
   const [reviewRating, setReviewRating]   = useState("");
   const [reviewComment, setReviewComment] = useState("");
   const [reviewMessage, setReviewMessage] = useState("");
@@ -102,7 +101,7 @@ export default function MovieActions({ movieId }: Props) {
       const data = await res.json();
       if (res.ok && data.success) {
         setReviewMessage("Recension skickad!");
-        setReviewName(""); setReviewRating(""); setReviewComment("");
+        setReviewRating(""); setReviewComment("");
         setReviewCount(c => c + 1);
       } else {
         setReviewMessage("Fel: " + (data.error ?? "Okänt fel"));
@@ -149,8 +148,6 @@ export default function MovieActions({ movieId }: Props) {
                 <div className="review-form-container">
                   <h3>Lämna en recension</h3>
                   <form id="reviewForm" onSubmit={submitReview}>
-                    <label htmlFor="name">Namn:</label>
-                    <input type="text" id="name" value={reviewName} onChange={e => setReviewName(e.target.value)} required />
                     <label htmlFor="rating">Betyg (1-5):</label>
                     <select id="rating" value={reviewRating} onChange={e => setReviewRating(e.target.value)} required>
                       <option value="">Välj</option>

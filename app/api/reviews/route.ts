@@ -1,49 +1,55 @@
 import { NextRequest, NextResponse } from "next/server";
+import { connectMongo } from "@/lib/db/mongodb";
+import Review from "@/models/Review";
 import { verifyToken, getTokenFromHeader } from "@/lib/auth";
-
-const CMS_REVIEWS = "https://plankton-app-xhkom.ondigitalocean.app/api/reviews";
 
 export async function POST(req: NextRequest) {
   const token = getTokenFromHeader(req.headers.get("authorization"));
   if (!token) return NextResponse.json({ error: "Ej inloggad" }, { status: 401 });
 
+  let payload;
   try {
-    await verifyToken(token);
+    payload = await verifyToken(token);
   } catch {
     return NextResponse.json({ error: "Ogiltig token" }, { status: 401 });
   }
 
-  const { name, rating, comment, movie } = await req.json();
-
-  if (!name || !comment || movie === undefined || rating === undefined) {
+  if (!payload.userId) {
     return NextResponse.json(
-      { success: false, error: "Alla fält krävs (name, rating, comment, movie)" },
-      { status: 400 }
+      { error: "Registrera dig för att skriva recensioner" },
+      { status: 403 }
     );
   }
 
-  if (typeof rating !== "number" || rating < 1 || rating > 5) {
+  const { rating, comment, movieId } = await req.json();
+
+  if (!movieId || !rating || !comment || Number(rating) < 1 || Number(rating) > 5) {
     return NextResponse.json(
-      { success: false, error: "Rating måste vara ett nummer mellan 1 och 5" },
+      { success: false, error: "Alla fält krävs (movieId, rating, comment)" },
       { status: 400 }
     );
   }
 
   try {
-    const response = await fetch(CMS_REVIEWS, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: { author: name, rating, comment, movie, verified: true } }),
+    await connectMongo();
+    const review = await Review.create({
+      movieId: Number(movieId),
+      userId: payload.userId,
+      author: payload.username,
+      rating: Number(rating),
+      comment: String(comment).trim(),
     });
-    const data = await response.json();
-    if (!response.ok) {
-      return NextResponse.json(
-        { success: false, error: data.error?.message || "Fel vid extern API" },
-        { status: response.status }
-      );
-    }
-    return NextResponse.json({ success: true, review: data.data });
+
+    return NextResponse.json({
+      success: true,
+      review: {
+        id: review._id.toString(),
+        rating: review.rating,
+        quote: review.comment,
+        name: review.author,
+      },
+    });
   } catch {
-    return NextResponse.json({ success: false, error: "Kunde inte skicka recensionen" }, { status: 500 });
+    return NextResponse.json({ success: false, error: "Kunde inte spara recensionen" }, { status: 500 });
   }
 }

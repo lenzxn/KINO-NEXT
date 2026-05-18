@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getReviewsByMovieId } from "@/lib/cms";
+import { connectMongo } from "@/lib/db/mongodb";
+import Review from "@/models/Review";
 import { loadMovie } from "@/lib/tmdb";
 import { calculateRating } from "@/lib/logic/ratingCalculator";
 
@@ -13,8 +14,9 @@ export async function GET(
   }
 
   try {
+    await connectMongo();
     const [reviews, movie] = await Promise.all([
-      getReviewsByMovieId(movieId),
+      Review.find({ movieId: Number(movieId) }).lean(),
       loadMovie(Number(movieId)),
     ]);
 
